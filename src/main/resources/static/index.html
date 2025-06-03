@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Usuários</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Estilos para títulos */
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para o formulário */
+        form {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        form div {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select,
+        input[type="datetime-local"] {
+            width: calc(100% - 12px); /* Ajuste para padding */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        select:focus,
+        input[type="datetime-local"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilos para mensagens */
+        #mensagem {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        #mensagem.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        #mensagem.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Estilos para a tabela de usuários */
+        #listaUsuarios {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #listaUsuarios th, #listaUsuarios td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        #listaUsuarios thead th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        #listaUsuarios tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #listaUsuarios tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Estilos para botões de ação na tabela */
+        .action-buttons button {
+            margin-right: 5px;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+<h1>Cadastro e Gestão de Usuários</h1>
+
+<form id="formCadastroUsuario">
+    <div>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+    </div>
+    <div>
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" name="tipo" required>
+            <option value="">Selecione um tipo</option>
+            <option value="ALUNO">ALUNO</option>
+            <option value="PROFESSOR">PROFESSOR</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="FUNCIONARIO">FUNCIONARIO</option>
+        </select>
+    </div>
+    <div>
+        <label for="dataInicio">Data e Hora de Início:</label>
+        <input type="datetime-local" id="dataInicio" name="dataInicio" required>
+    </div>
+    <div>
+        <label for="dataFim">Data e Hora de Fim:</label>
+        <input type="datetime-local" id="dataFim" name="dataFim" required>
+    </div>
+    <button type="submit" id="btnSalvar">Salvar Usuário</button>
+    <button type="button" id="btnCancelarEdicao" style="display: none; background-color: #6c757d;">Cancelar Edição</button>
+    <input type="hidden" id="usuarioId">
+</form>
+
+<div id="mensagem" class="success" style="display: none;"></div>
+
+<h2>Usuários Cadastrados</h2>
+<table id="listaUsuarios">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+
+    const form = document.getElementById('formCadastroUsuario');
+    const mensagemDiv = document.getElementById('mensagem');
+    const listaUsuariosBody = document.querySelector('#listaUsuarios tbody');
+    const btnSalvar = document.getElementById('btnSalvar');
+    const btnCancelarEdicao = document.getElementById('btnCancelarEdicao');
+    const usuarioIdInput = document.getElementById('usuarioId');
+
+    const API_BASE_URL = 'http://localhost:8080/api/usuarios';
+
+    function exibirMensagem(texto, tipo) {
+        mensagemDiv.textContent = texto;
+        mensagemDiv.className = `alert ${tipo}`; // Define a classe CSS (success ou error)
+        mensagemDiv.style.display = 'block'; // Mostra a div de mensagem
+        setTimeout(() => {
+            mensagemDiv.style.display = 'none'; // Esconde a mensagem após 5 segundos
+        }, 5000);
+    }
+
+    function limparFormulario() {
+        form.reset();
+        usuarioIdInput.value = '';
+        btnSalvar.textContent = 'Salvar Usuário';
+        btnCancelarEdicao.style.display = 'none';
+        document.getElementById('email').disabled = false; // Habilita o campo email
+    }
+
+    async function carregarUsuarios() {
+        try {
+            const response = await fetch(API_BASE_URL);
+            if (!response.ok) {
+                throw new Error(`Erro ao carregar usuários: ${response.status} ${response.statusText}`);
+            }
+            const usuarios = await response.json();
+
+            listaUsuariosBody.innerHTML = ''; // Limpa a lista existente
+
+            if (usuarios.length === 0) {
+                const row = listaUsuariosBody.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 5; // Ocupa todas as colunas
+                cell.textContent = 'Nenhum usuário cadastrado.';
+                cell.style.textAlign = 'center';
+            } else {
+                usuarios.forEach(usuario => {
+                    const row = listaUsuariosBody.insertRow();
+                    row.insertCell(0).textContent = usuario.id;
+                    row.insertCell(1).textContent = usuario.nome;
+                    row.insertCell(2).textContent = usuario.email;
+                    row.insertCell(3).textContent = usuario.tipo;
+
+                    const acoesCell = row.insertCell(4);
+                    acoesCell.className = 'action-buttons';
+
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = 'Editar';
+                    editBtn.className = 'edit-btn';
+                    editBtn.onclick = () => preencherFormularioParaEdicao(usuario);
+                    acoesCell.appendChild(editBtn);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Deletar';
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.onclick = () => deletarUsuario(usuario.id, usuario.nome);
+                    acoesCell.appendChild(deleteBtn);
+                });
+            }
+        } catch (error) {
+            console.error('Erro ao carregar usuários:', error);
+            exibirMensagem('Erro ao carregar usuários: ' + error.message, 'error');
+        }
+    }
+
+    function preencherFormularioParaEdicao(usuario) {
+        document.getElementById('nome').value = usuario.nome;
+        document.getElementById('email').value = usuario.email;
+        document.getElementById('senha').value = usuario.senha; // Atenção: Em prod, senhas não viriam assim.
+        document.getElementById('tipo').value = usuario.tipo;
+        document.getElementById('dataInicio').value = usuario.dataInicio; // Supondo que o objeto usuario tenha essa propriedade
+        document.getElementById('dataFim').value = usuario.dataFim; // Supondo que o objeto usuario tenha essa propriedade
+        usuarioIdInput.value = usuario.id; // Armazena o ID no campo oculto
+
+        btnSalvar.textContent = 'Atualizar Usuário';
+        btnCancelarEdicao.style.display = 'inline-block';
+        document.getElementById('email').disabled = true; // Geralmente, email não é editado após criação
+        window.scrollTo(0, 0); // Volta para o topo da página para o formulário
+    }
+
+    async function deletarUsuario(id, nomeUsuario) {
+        if (!confirm(`Tem certeza que deseja deletar o usuário "${nomeUsuario}" (ID: ${id})?`)) {
+            return; // Usuário cancelou
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                // Tenta ler a mensagem de erro do backend se disponível
+                const errorText = await response.text();
+                throw new Error(`Erro ao deletar usuário: ${response.status} ${response.statusText} - ${errorText}`);
+            }
+
+            exibirMensagem(`Usuário "${nomeUsuario}" deletado com sucesso!`, 'success');
+            carregarUsuarios(); // Recarrega a lista após a exclusão
+        } catch (error) {
+            console.error('Erro ao deletar usuário:', error);
+            exibirMensagem('Erro ao deletar usuário: ' + error.message, 'error');
+        }
+    }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Evita o recarregamento padrão da página
+
+        const id = usuarioIdInput.value; // Pega o ID (vazio para novo, preenchido para edição)
+        const usuario = {
+            nome: document.getElementById('nome').value,
+            email: document.getElementById('email').value,
+            senha: document.getElementById('senha').value,
+            tipo: document.getElementById('tipo').value,
+            dataInicio: document.getElementById('dataInicio').value,
+            dataFim: document.getElementById('dataFim').value
+        };
+
+        try {
+            let response;
+            if (id) {
+                response = await fetch(`${API_BASE_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(usuario)
+                });
+            } else {
+                // Se não há ID, é uma nova criação (POST)
+                response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(usuario)
+                });
+            }
+
+            if (!response.ok) {
+                // Tenta ler a mensagem de erro do backend se disponível
+                const errorData = await response.json(); // Ou response.text() se o backend não retornar JSON
+                const errorMessage = errorData.message || `Erro HTTP! status: ${response.status} ${response.statusText}`;
+                throw new Error(errorMessage);
+            }
+
+            const usuarioSalvo = await response.json();
+            exibirMensagem(`Usuário "${usuarioSalvo.nome}" salvo/atualizado com sucesso!`, 'success');
+            limparFormulario(); // Limpa o formulário
+            carregarUsuarios(); // Recarrega a lista de usuários para mostrar as alterações
+        } catch (error) {
+            console.error('Erro ao salvar/atualizar usuário:', error);
+            exibirMensagem(`Erro: ${error.message}`, 'error');
+        }
+    });
+
+    btnCancelarEdicao.addEventListener('click', limparFormulario);
+    document.addEventListener('DOMContentLoaded', carregarUsuarios);
+</script>
+</body>
+</html>
