@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Usuários</title>
     <style>
+        /* Estilos básicos para o corpo da página */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
@@ -85,7 +86,7 @@
             padding: 15px;
             border-radius: 5px;
             font-weight: bold;
-            display: none;
+            display: none; /* Escondido por padrão */
         }
 
         #mensagem.success {
@@ -108,7 +109,7 @@
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            overflow: hidden;
+            overflow: hidden; /* Garante que bordas arredondadas funcionem com overflow */
         }
 
         #listaUsuarios th, #listaUsuarios td {
@@ -212,7 +213,7 @@
 </table>
 
 <script>
-
+    // Seleção de elementos do DOM
     const form = document.getElementById('formCadastroUsuario');
     const mensagemDiv = document.getElementById('mensagem');
     const listaUsuariosBody = document.querySelector('#listaUsuarios tbody');
@@ -220,8 +221,12 @@
     const btnCancelarEdicao = document.getElementById('btnCancelarEdicao');
     const usuarioIdInput = document.getElementById('usuarioId');
 
+    // URL base da sua API Spring Boot
     const API_BASE_URL = 'http://localhost:8080/api/usuarios';
 
+    // --- Funções Auxiliares ---
+
+    // Exibe uma mensagem na tela (sucesso ou erro)
     function exibirMensagem(texto, tipo) {
         mensagemDiv.textContent = texto;
         mensagemDiv.className = `alert ${tipo}`; // Define a classe CSS (success ou error)
@@ -231,6 +236,7 @@
         }, 5000);
     }
 
+    // Limpa o formulário e reseta o estado de edição
     function limparFormulario() {
         form.reset();
         usuarioIdInput.value = '';
@@ -239,6 +245,9 @@
         document.getElementById('email').disabled = false; // Habilita o campo email
     }
 
+    // --- Funções de Interação com a API ---
+
+    // Função para carregar e exibir usuários na tabela
     async function carregarUsuarios() {
         try {
             const response = await fetch(API_BASE_URL);
@@ -285,6 +294,7 @@
         }
     }
 
+    // Preenche o formulário com dados de um usuário para edição
     function preencherFormularioParaEdicao(usuario) {
         document.getElementById('nome').value = usuario.nome;
         document.getElementById('email').value = usuario.email;
@@ -300,6 +310,7 @@
         window.scrollTo(0, 0); // Volta para o topo da página para o formulário
     }
 
+    // Função para deletar um usuário
     async function deletarUsuario(id, nomeUsuario) {
         if (!confirm(`Tem certeza que deseja deletar o usuário "${nomeUsuario}" (ID: ${id})?`)) {
             return; // Usuário cancelou
@@ -324,6 +335,9 @@
         }
     }
 
+    // --- Event Listeners ---
+
+    // Lida com a submissão do formulário (criar ou atualizar)
     form.addEventListener('submit', async (event) => {
         event.preventDefault(); // Evita o recarregamento padrão da página
 
@@ -340,6 +354,7 @@
         try {
             let response;
             if (id) {
+                // Se há um ID, é uma atualização (PUT)
                 response = await fetch(`${API_BASE_URL}/${id}`, {
                     method: 'PUT',
                     headers: {
@@ -375,7 +390,12 @@
         }
     });
 
+    // Cancela a edição e limpa o formulário
     btnCancelarEdicao.addEventListener('click', limparFormulario);
+
+    // --- Inicialização ---
+
+    // Carrega os usuários quando a página é carregada pela primeira vez
     document.addEventListener('DOMContentLoaded', carregarUsuarios);
 </script>
 </body>

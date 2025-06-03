@@ -23,7 +23,6 @@ public class UsuarioRepository {
         String sql;
         try (Connection conn = dataSource.getConnection()) {
             if (usuario.getId() == null) {
-                // INSERT operation
                 sql = "INSERT INTO usuario (nome, email, senha, tipo) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                     ps.setString(1, usuario.getNome());
@@ -39,7 +38,6 @@ public class UsuarioRepository {
                     }
                 }
             } else {
-                // UPDATE operation
                 sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, tipo = ? WHERE id = ?";
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setString(1, usuario.getNome());
@@ -144,7 +142,6 @@ public class UsuarioRepository {
         }
     }
 
-    // Helper method to map a ResultSet row to a Usuario object
     private Usuario mapRow(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
         usuario.setId(rs.getLong("id"));

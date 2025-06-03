@@ -37,8 +37,6 @@ public class UsuarioService {
         try {
             Usuario usuarioExistente = usuarioRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
-
-            // Check if email is being changed to an existing one by another user
             if (!usuarioExistente.getEmail().equalsIgnoreCase(email)) {
                 if (usuarioRepository.existsByEmail(email)) {
                     throw new RuntimeException("Já existe outro usuário cadastrado com este e-mail: " + email);
@@ -47,7 +45,7 @@ public class UsuarioService {
 
             usuarioExistente.setNome(nome);
             usuarioExistente.setEmail(email);
-            usuarioExistente.setSenha(senha); // In a real app, handle password hashing
+            usuarioExistente.setSenha(senha);
             usuarioExistente.setTipo(tipo);
 
             return usuarioRepository.save(usuarioExistente);

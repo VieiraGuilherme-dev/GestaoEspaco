@@ -23,7 +23,6 @@ public class AvaliacaoRepository {
         String sql;
         try (Connection conn = dataSource.getConnection()) {
             if (avaliacao.getId() == null) {
-                // INSERT operation
                 sql = "INSERT INTO avaliacao (solicitacao_id, gestor_id, status, justificativa, data_avaliacao) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                     ps.setLong(1, avaliacao.getSolicitacaoId());
@@ -40,7 +39,6 @@ public class AvaliacaoRepository {
                     }
                 }
             } else {
-                // UPDATE operation
                 sql = "UPDATE avaliacao SET solicitacao_id = ?, gestor_id = ?, status = ?, justificativa = ?, data_avaliacao = ? WHERE id = ?";
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setLong(1, avaliacao.getSolicitacaoId());
@@ -131,8 +129,6 @@ public class AvaliacaoRepository {
             ps.executeUpdate();
         }
     }
-
-    // Helper method to map a ResultSet row to an Avaliacao object
     private Avaliacao mapRow(ResultSet rs) throws SQLException {
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setId(rs.getLong("id"));

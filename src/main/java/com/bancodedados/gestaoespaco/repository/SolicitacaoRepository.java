@@ -25,7 +25,6 @@ public class SolicitacaoRepository {
         String sql;
         try (Connection conn = dataSource.getConnection()) {
             if (solicitacao.getId() == null) {
-                // INSERT operation
                 sql = "INSERT INTO solicitacao (usuario_id, espaco_id, data_reserva, hora_reserva, data_solicitacao, status) VALUES (?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                     ps.setLong(1, solicitacao.getUsuarioId());

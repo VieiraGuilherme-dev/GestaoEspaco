@@ -5,7 +5,7 @@ public class Usuario {
     private Long id;
     private String nome;
     private String email;
-    private String senha;
+    private String senha; // Em uma aplicação real, a senha deve ser hash
     private TipoUsuario tipo;
 
     public Usuario() {

@@ -46,7 +46,7 @@ public class ReservaRepository {
                     ps.setLong(2, reserva.getEspacoId());
                     ps.setTimestamp(3, Timestamp.valueOf(reserva.getDataHoraInicio()));
                     ps.setTimestamp(4, Timestamp.valueOf(reserva.getDataHoraFim()));
-                    ps.setString(5, reserva.getStatus().name());
+                    ps.setString(5, reserva.getStatus().name()); // Store enum as String
                     ps.setLong(6, reserva.getId());
                     ps.executeUpdate();
                 }
@@ -87,7 +87,7 @@ public class ReservaRepository {
         String sql = "SELECT id, usuario_id, espaco_id, data_hora_inicio, data_hora_fim, status FROM reserva WHERE status = ? ORDER BY data_hora_inicio DESC";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, status.name());
+            ps.setString(1, status.name()); // Store enum as String
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     reservas.add(mapRow(rs));

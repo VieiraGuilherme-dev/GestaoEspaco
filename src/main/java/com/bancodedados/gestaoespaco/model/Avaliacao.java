@@ -7,7 +7,7 @@ public class Avaliacao {
     private Long id;
     private Long solicitacaoId;
     private Long gestorId;
-    private String status; // APROVADA, REJEITADA
+    private String status;
     private String justificativa;
     private LocalDateTime dataAvaliacao;
 

@@ -86,7 +86,7 @@ public class ReservaService {
                     reserva.getEspacoId(),
                     reserva.getDataHoraInicio(),
                     reserva.getDataHoraFim(),
-                    reserva.getId() // Exclude current reservation from overlap check
+                    reserva.getId()
             );
             if (!overlappingReservas.isEmpty()) {
                 throw new RuntimeException("Não é possível aprovar a reserva devido a conflito de horários com outra reserva já aprovada ou pendente.");

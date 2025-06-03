@@ -23,7 +23,6 @@ public class EspacoFisicoRepository {
         String sql;
         try (Connection conn = dataSource.getConnection()) {
             if (espacoFisico.getId() == null) {
-                // INSERT operation
                 sql = "INSERT INTO espaco_fisico (nome, localizacao, capacidade, tipo, disponivel) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                     ps.setString(1, espacoFisico.getNome());
@@ -124,7 +123,7 @@ public class EspacoFisicoRepository {
         espaco.setNome(rs.getString("nome"));
         espaco.setLocalizacao(rs.getString("localizacao"));
         espaco.setCapacidade(rs.getInt("capacidade"));
-        espaco.setTipo(TipoEspaco.valueOf(rs.getString("tipo")));
+        espaco.setTipo(TipoEspaco.valueOf(rs.getString("tipo"))); // Convert String back to enum
         espaco.setDisponivel(rs.getBoolean("disponivel"));
         return espaco;
     }

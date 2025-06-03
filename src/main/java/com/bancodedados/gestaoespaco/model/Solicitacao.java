@@ -16,7 +16,7 @@ public class Solicitacao {
 
     public Solicitacao() {
         this.dataSolicitacao = LocalDateTime.now();
-        this.status = "PENDENTE";
+        this.status = "PENDENTE"; // Default status
     }
 
     public Solicitacao(Long usuarioId, Long espacoId, LocalDate dataReserva, LocalTime horaReserva) {
@@ -25,7 +25,7 @@ public class Solicitacao {
         this.dataReserva = dataReserva;
         this.horaReserva = horaReserva;
         this.dataSolicitacao = LocalDateTime.now();
-        this.status = "PENDENTE";
+        this.status = "PENDENTE"; // Default status
     }
 
     public Long getId() {

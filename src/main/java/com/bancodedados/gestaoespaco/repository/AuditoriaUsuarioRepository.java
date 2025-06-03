@@ -23,7 +23,7 @@ public class AuditoriaUsuarioRepository {
         String sql;
         try (Connection conn = dataSource.getConnection()) {
             if (auditoria.getId() == null) {
-                // INSERT operation
+
                 sql = "INSERT INTO auditoria_usuario (usuario_id, acao, data_hora) VALUES (?, ?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                     ps.setLong(1, auditoria.getUsuarioId());
@@ -114,7 +114,6 @@ public class AuditoriaUsuarioRepository {
         }
     }
 
-    // Helper method to map a ResultSet row to an AuditoriaUsuario object
     private AuditoriaUsuario mapRow(ResultSet rs) throws SQLException {
         AuditoriaUsuario auditoria = new AuditoriaUsuario();
         auditoria.setId(rs.getLong("id"));

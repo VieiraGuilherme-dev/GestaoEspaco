@@ -12,7 +12,7 @@ public class Reserva {
     private StatusReserva status;
 
     public Reserva() {
-        this.status = StatusReserva.PENDENTE; // Default status
+        this.status = StatusReserva.PENDENTE;
     }
 
     public Reserva(Long usuarioId, Long espacoId, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
@@ -20,7 +20,7 @@ public class Reserva {
         this.espacoId = espacoId;
         this.dataHoraInicio = dataHoraInicio;
         this.dataHoraFim = dataHoraFim;
-        this.status = StatusReserva.PENDENTE; // Default status
+        this.status = StatusReserva.PENDENTE;
     }
 
     public Long getId() {
