@@ -65,8 +65,6 @@
 --     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 -- );
 
-
--- Resetar sequências e limpar tabelas (CUIDADO EM PRODUÇÃO!)
 TRUNCATE TABLE auditoria_usuario RESTART IDENTITY CASCADE;
 TRUNCATE TABLE avaliacao RESTART IDENTITY CASCADE;
 TRUNCATE TABLE solicitacao RESTART IDENTITY CASCADE;
@@ -74,10 +72,6 @@ TRUNCATE TABLE reserva RESTART IDENTITY CASCADE;
 TRUNCATE TABLE espaco_fisico RESTART IDENTITY CASCADE;
 TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
 
-
--- Inserindo usuários (com senhas BCrypt encodadas para 'senha123')
--- Você DEVE gerar os hashes reais das senhas. Use um BCryptPasswordEncoder para isso.
--- Exemplo de hash (para 'senha123'): $2a$10$w850c/0U1.Y/j/M.t3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.
 INSERT INTO usuario (id, nome, email, senha, tipo) VALUES (1, 'Admin do Sistema', 'admin@gestao.com', '$2a$10$w850c/0U1.Y/j/M.t3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.', 'ADMIN');
 INSERT INTO usuario (id, nome, email, senha, tipo) VALUES (2, 'Aluno Exemplo', 'aluno@gmail.com', '$2a$10$w850c/0U1.Y/j/M.t3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.', 'ALUNO');
 INSERT INTO usuario (id, nome, email, senha, tipo) VALUES (3, 'Prof. Ana Silva', 'ana.silva@escola.com', '$2a$10$w850c/0U1.Y/j/M.t3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.', 'PROFESSOR');
@@ -88,16 +82,11 @@ INSERT INTO usuario (id, nome, email, senha, tipo) VALUES (63, 'Marcos', 'marcos
 INSERT INTO usuario (id, nome, email, senha, tipo) VALUES (8, 'wagner teofilo', 'wagner@gmail.com', '$2a$10$w850c/0U1.Y/j/M.t3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.', 'ALUNO');
 INSERT INTO usuario (id, nome, email, senha, tipo) VALUES (64, 'Alex Marcis', 'alex@gmail.com', '$2a$10$w850c/0U1.Y/j/M.t3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.k3q0m.', 'ALUNO');
 
-
--- Inserindo espaços físicos
 INSERT INTO espaco_fisico (id, nome, localizacao, capacidade, tipo, disponivel) VALUES (101, 'Sala 101', 'Bloco A', 30, 'SALA_DE_AULA', TRUE);
 INSERT INTO espaco_fisico (id, nome, localizacao, capacidade, tipo, disponivel) VALUES (102, 'Laboratório de Informática', 'Bloco B', 20, 'LABORATORIO', TRUE);
 INSERT INTO espaco_fisico (id, nome, localizacao, capacidade, tipo, disponivel) VALUES (103, 'Auditório Principal', 'Prédio Central', 200, 'AUDITORIO', TRUE);
 INSERT INTO espaco_fisico (id, nome, localizacao, capacidade, tipo, disponivel) VALUES (104, 'Sala de Reunião Alpha', 'Andar 3', 8, 'SALA_DE_REUNIAO', TRUE);
 
-
--- Inserindo solicitações (com base na sua definição de 'solicitacao')
--- Note que data_reserva e hora_reserva são separadas.
 INSERT INTO solicitacao (id, usuario_id, espaco_id, data_reserva, hora_reserva, data_solicitacao, status) VALUES
 (1, 2, 101, '2025-06-10', '09:00:00', '2025-06-02 14:00:00', 'PENDENTE');
 
@@ -107,27 +96,15 @@ INSERT INTO solicitacao (id, usuario_id, espaco_id, data_reserva, hora_reserva, 
 INSERT INTO solicitacao (id, usuario_id, espaco_id, data_reserva, hora_reserva, data_solicitacao, status) VALUES
 (3, 5, 101, '2025-06-10', '10:00:00', '2025-06-02 15:00:00', 'PENDENTE');
 
--- Inserindo reservas (com base na sua definição de 'reserva')
--- Note que esta tabela já tem data_hora_inicio e data_hora_fim
 INSERT INTO reserva (id, usuario_id, espaco_id, data_hora_inicio, data_hora_fim, status) VALUES
 (1, 1, 103, '2025-06-15 10:00:00', '2025-06-15 12:00:00', 'APROVADA');
 
 INSERT INTO reserva (id, usuario_id, espaco_id, data_hora_inicio, data_hora_fim, status) VALUES
 (2, 4, 104, '2025-06-20 09:00:00', '2025-06-20 10:30:00', 'PENDENTE');
 
-
--- Inserindo avaliações (referenciando as solicitações que você criou)
--- As avaliações devem ser feitas por um GESTOR ou ADMIN (usuario_id = 1, 'Admin do Sistema' é um ADMIN)
 INSERT INTO avaliacao (id, solicitacao_id, gestor_id, status, justificativa, data_avaliacao) VALUES
 (1, 1, 1, 'APROVADA', 'Solicitação aprovada para Sala 101.', '2025-06-02 14:05:00');
 
--- Exemplo de avaliação rejeitada (se houvesse uma solicitação 4 rejeitada)
--- INSERT INTO avaliacao (id, solicitacao_id, gestor_id, status, justificativa, data_avaliacao) VALUES
--- (2, 4, 1, 'REJEITADA', 'Conflito de horário com outra reserva importante.', '2025-06-02 16:30:00');
-
-
--- Inserindo registros de auditoria_usuario
--- Você pode adicionar registros para as ações de criação de usuários e outras operações importantes.
 INSERT INTO auditoria_usuario (id, usuario_id, acao, data_hora) VALUES (1, 1, 'USUARIO_CRIADO', '2025-06-02 13:50:00');
 INSERT INTO auditoria_usuario (id, usuario_id, acao, data_hora) VALUES (2, 2, 'USUARIO_CRIADO', '2025-06-02 13:51:00');
 INSERT INTO auditoria_usuario (id, usuario_id, acao, data_hora) VALUES (3, 1, 'SOLICITACAO_CRIADA: ID 1', '2025-06-02 14:00:00');

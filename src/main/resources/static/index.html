@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Usuários</title>
     <style>
-        /* Estilos básicos para o corpo da página */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
@@ -14,7 +13,6 @@
             line-height: 1.6;
         }
 
-        /* Estilos para títulos */
         h1, h2 {
             color: #0056b3;
             border-bottom: 2px solid #007bff;
@@ -22,7 +20,6 @@
             margin-bottom: 20px;
         }
 
-        /* Estilos para o formulário */
         form {
             background-color: #fff;
             padding: 25px;
@@ -48,7 +45,7 @@
         input[type="password"],
         select,
         input[type="datetime-local"] {
-            width: calc(100% - 12px); /* Ajuste para padding */
+            width: calc(100% - 12px);
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -80,13 +77,12 @@
             background-color: #0056b3;
         }
 
-        /* Estilos para mensagens */
         #mensagem {
             margin-top: 20px;
             padding: 15px;
             border-radius: 5px;
             font-weight: bold;
-            display: none; /* Escondido por padrão */
+            display: none;
         }
 
         #mensagem.success {
@@ -109,7 +105,7 @@
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            overflow: hidden; /* Garante que bordas arredondadas funcionem com overflow */
+            overflow: hidden;
         }
 
         #listaUsuarios th, #listaUsuarios td {
@@ -213,7 +209,6 @@
 </table>
 
 <script>
-    // Seleção de elementos do DOM
     const form = document.getElementById('formCadastroUsuario');
     const mensagemDiv = document.getElementById('mensagem');
     const listaUsuariosBody = document.querySelector('#listaUsuarios tbody');
@@ -221,22 +216,17 @@
     const btnCancelarEdicao = document.getElementById('btnCancelarEdicao');
     const usuarioIdInput = document.getElementById('usuarioId');
 
-    // URL base da sua API Spring Boot
     const API_BASE_URL = 'http://localhost:8080/api/usuarios';
 
-    // --- Funções Auxiliares ---
-
-    // Exibe uma mensagem na tela (sucesso ou erro)
     function exibirMensagem(texto, tipo) {
         mensagemDiv.textContent = texto;
-        mensagemDiv.className = `alert ${tipo}`; // Define a classe CSS (success ou error)
-        mensagemDiv.style.display = 'block'; // Mostra a div de mensagem
+        mensagemDiv.className = `alert ${tipo}`;
+        mensagemDiv.style.display = 'block';
         setTimeout(() => {
-            mensagemDiv.style.display = 'none'; // Esconde a mensagem após 5 segundos
+            mensagemDiv.style.display = 'none';
         }, 5000);
     }
 
-    // Limpa o formulário e reseta o estado de edição
     function limparFormulario() {
         form.reset();
         usuarioIdInput.value = '';
@@ -245,9 +235,6 @@
         document.getElementById('email').disabled = false; // Habilita o campo email
     }
 
-    // --- Funções de Interação com a API ---
-
-    // Função para carregar e exibir usuários na tabela
     async function carregarUsuarios() {
         try {
             const response = await fetch(API_BASE_URL);
@@ -294,7 +281,6 @@
         }
     }
 
-    // Preenche o formulário com dados de um usuário para edição
     function preencherFormularioParaEdicao(usuario) {
         document.getElementById('nome').value = usuario.nome;
         document.getElementById('email').value = usuario.email;
@@ -310,10 +296,9 @@
         window.scrollTo(0, 0); // Volta para o topo da página para o formulário
     }
 
-    // Função para deletar um usuário
     async function deletarUsuario(id, nomeUsuario) {
         if (!confirm(`Tem certeza que deseja deletar o usuário "${nomeUsuario}" (ID: ${id})?`)) {
-            return; // Usuário cancelou
+            return;
         }
 
         try {
@@ -322,26 +307,22 @@
             });
 
             if (!response.ok) {
-                // Tenta ler a mensagem de erro do backend se disponível
                 const errorText = await response.text();
                 throw new Error(`Erro ao deletar usuário: ${response.status} ${response.statusText} - ${errorText}`);
             }
 
             exibirMensagem(`Usuário "${nomeUsuario}" deletado com sucesso!`, 'success');
-            carregarUsuarios(); // Recarrega a lista após a exclusão
+            carregarUsuarios();
         } catch (error) {
             console.error('Erro ao deletar usuário:', error);
             exibirMensagem('Erro ao deletar usuário: ' + error.message, 'error');
         }
     }
 
-    // --- Event Listeners ---
-
-    // Lida com a submissão do formulário (criar ou atualizar)
     form.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita o recarregamento padrão da página
+        event.preventDefault();
 
-        const id = usuarioIdInput.value; // Pega o ID (vazio para novo, preenchido para edição)
+        const id = usuarioIdInput.value;
         const usuario = {
             nome: document.getElementById('nome').value,
             email: document.getElementById('email').value,
@@ -354,7 +335,6 @@
         try {
             let response;
             if (id) {
-                // Se há um ID, é uma atualização (PUT)
                 response = await fetch(`${API_BASE_URL}/${id}`, {
                     method: 'PUT',
                     headers: {
@@ -363,7 +343,6 @@
                     body: JSON.stringify(usuario)
                 });
             } else {
-                // Se não há ID, é uma nova criação (POST)
                 response = await fetch(API_BASE_URL, {
                     method: 'POST',
                     headers: {
@@ -374,7 +353,7 @@
             }
 
             if (!response.ok) {
-                // Tenta ler a mensagem de erro do backend se disponível
+
                 const errorData = await response.json(); // Ou response.text() se o backend não retornar JSON
                 const errorMessage = errorData.message || `Erro HTTP! status: ${response.status} ${response.statusText}`;
                 throw new Error(errorMessage);
@@ -382,20 +361,15 @@
 
             const usuarioSalvo = await response.json();
             exibirMensagem(`Usuário "${usuarioSalvo.nome}" salvo/atualizado com sucesso!`, 'success');
-            limparFormulario(); // Limpa o formulário
-            carregarUsuarios(); // Recarrega a lista de usuários para mostrar as alterações
+            limparFormulario();
+            carregarUsuarios();
         } catch (error) {
             console.error('Erro ao salvar/atualizar usuário:', error);
             exibirMensagem(`Erro: ${error.message}`, 'error');
         }
     });
 
-    // Cancela a edição e limpa o formulário
     btnCancelarEdicao.addEventListener('click', limparFormulario);
-
-    // --- Inicialização ---
-
-    // Carrega os usuários quando a página é carregada pela primeira vez
     document.addEventListener('DOMContentLoaded', carregarUsuarios);
 </script>
 </body>
