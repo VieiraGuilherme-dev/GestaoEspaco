@@ -1,4 +1,4 @@
-# 🏢 Sistema de Gestão de Espaço Físico - Universidade
+# Sistema de Gestão de Espaço Físico - Universidade
 
 Este projeto consiste em um sistema completo para gerenciamento de solicitações de **reserva de espaços físicos**, como salas de aula, laboratórios, auditórios, salas de reunião, vagas de estacionamento, entre outros.
 
