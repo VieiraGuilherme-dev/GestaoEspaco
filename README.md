@@ -68,7 +68,15 @@ spring.datasource.password=sua_senha
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+---
+📸 Demonstração – Tela de Usuários Cadastrados
 
+Nesta tela, é possível visualizar todos os usuários cadastrados no sistema, com suas informações básicas e opções para gerenciamento.
+![Tela de usuários cadastrados](https://github.com/VieiraGuilherme-dev/GestaoEspaco/blob/main/src/img/Captura%20de%20tela%202025-09-02%20114625.png)
+
+
+
+---
 ## 🧠 Como Executar o Projeto
 ---
 1. Clone este repositório:
