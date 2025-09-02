@@ -53,6 +53,21 @@ PostgreSQL 15+
 
 ---
 
+Postman (para testes da API)
+
+Crie o banco de dados no PostgreSQL:
+
+CREATE DATABASE gestao_espaco;
+
+
+Configure as credenciais no arquivo application.properties:
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/gestao_espaco
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 
 ## 🧠 Como Executar o Projeto
 ---
