@@ -52,51 +52,8 @@ Maven 3.8+
 PostgreSQL 15+
 
 ---
-Postman (para testes da API)
-
-Crie o banco de dados no PostgreSQL:
-
-CREATE DATABASE gestao_espaco;
 
 
-Configure as credenciais no arquivo application.properties:
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/gestao_espaco
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-
-
----
-
-xemplos de Requisições
-✅ Criar uma nova reserva:
-POST /api/reservas
-Content-Type: application/json
-
-{
-  "usuarioId": 1,
-  "espacoId": 2,
-  "data": "2025-09-10",
-  "horaInicio": "14:00",
-  "horaFim": "16:00"
-}
-
-✅ Aprovar ou rejeitar solicitação:
-PUT /api/avaliacoes/1
-Content-Type: application/json
-
-{
-  "gestorId": 3,
-  "status": "APROVADO",
-  "justificativa": "Horário disponível"
-}
-
-✅ Listar reservas aprovadas:
-GET /api/reservas/aprovadas
 ## 🧠 Como Executar o Projeto
 ---
 1. Clone este repositório:
