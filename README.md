@@ -19,12 +19,6 @@ O objetivo é permitir que usuários solicitem reservas de espaços e que gestor
 
 ---
 
-## 🗂️ Estrutura do Projeto
-
-
-
-
----
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -54,3 +48,5 @@ O objetivo é permitir que usuários solicitem reservas de espaços e que gestor
 ```bash
 git clone https://github.com/seu-usuario/seu-repositorio.git
 
+
+contato - gv524003@gmail.com
